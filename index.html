@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>Go Web Socket</title>
+</head>
+<body>
+    <script>
+        let socket = new WebSocket('ws://localhost:8080/ws')
+        socket.onopen = () => {
+            console.log('success!')
+            socket.send('Hi!')
+        }
+        socket.onclose = e => {
+            console.log('Closed!', e)
+        }
+        socket.onerror = err => {
+            console.log('Error!', err)
+        }
+        socket.onmessage = msg => [
+            console.log(msg)
+        ]
+    </script>
+</body>
+</html>
