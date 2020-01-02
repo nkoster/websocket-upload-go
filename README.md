@@ -16,6 +16,7 @@ Usage, assuming you have your Go environment up & running:
 ```
 git clone https://github.com/nkoster/websocket-upload-go
 cd websocket-upload-go
+go get github.com/gorilla/websocket
 go build
 ./websocket-upload-go
 ````
