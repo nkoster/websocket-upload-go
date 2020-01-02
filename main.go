@@ -25,7 +25,11 @@ func main() {
 		var err error
 		go func(conn *websocket.Conn) {
 			for {
-				mt, data, _ := conn.ReadMessage()
+				mt, data, connErr := conn.ReadMessage()
+				if connErr != nil {
+					log.Println("Broken connection.", connErr)
+					return
+				}
 				if mt == 1 {
 					event := strings.Split(string(data), ":")
 					if event[0] == "upload" {
