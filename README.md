@@ -30,6 +30,12 @@ go run *.go
 Open http://localhost:8086 and drag-and-drop a file in the page.
 An uploaded file will appear in /tmp/, in this example.
 
+You can adjust the host and the port:
+
+```
+./websocket-upload -host example.com -port 8000
+```
+
 Before uploading, an MD5 sum is calculated. This is for the future.
 I'm using [js-spark-md5](https://github.com/satazor/js-spark-md5) from André Cruz
 for the in-fly MD5 calculation.
