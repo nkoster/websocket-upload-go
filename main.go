@@ -13,16 +13,36 @@ import (
 var upgrader = websocket.Upgrader{}
 
 func main() {
-	log.Println("flextube")
+	var serverHost string = "localhost"
+	var serverPort string = "8086"
+	for i, arg := range os.Args {
+		if arg == "-host" {
+			serverHost = os.Args[i+1]
+			arg = ""
+		}
+		if arg == "-port" {
+			serverPort = os.Args[i+1]
+			arg = ""
+		}
+		if arg == "--help" {
+			log.Printf("\nUsage: %s [[-host <host>] [-port <port>]]\n", os.Args[0])
+			os.Exit(0)
+		}
+	}
+	log.Println("flextube", serverHost+":"+serverPort)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, html())
+		fmt.Fprint(w, html(serverHost, serverPort))
 	})
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		var conn, _ = upgrader.Upgrade(w, r, nil)
+		var err error
+		conn, err := upgrader.Upgrade(w, r, nil)
+		if err != nil {
+			log.Println("Broken connection.", err)
+			return
+		}
 		log.Printf("Connection, %T\n", conn)
 		filename := ""
 		var f *os.File
-		var err error
 		go func(conn *websocket.Conn) {
 			for {
 				mt, data, connErr := conn.ReadMessage()
