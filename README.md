@@ -1,11 +1,11 @@
-# Web Socket Upload Golang
+# Websocket Upload Golang
 
-Upload a huge file in chunks over a web socket connection.
+Upload a huge file in chunks over a websocket connection.
 
 Based on [websocket-upload](https://github.com/nkoster/websocket-upload), where the server is written in JavaScript.
 
-I'm using the [Gorilla](https://github.com/gorilla/websocket/) web socket framework for the server side web socket logic. 
-Front JS is based on a gist from Alessandro Diaferia.
+I'm using the Golang [Gorilla](https://github.com/gorilla/websocket/) websocket framework for the server. 
+Front-end JavaScript is based on a gist from Alessandro Diaferia.
 https://gist.github.com/alediaferia/cfb3a7503039f9278381
 
 DISCLAIMER: I'm not sure if this is a good idea, but it actually works.
