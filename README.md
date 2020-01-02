@@ -11,7 +11,7 @@ https://gist.github.com/alediaferia/cfb3a7503039f9278381
 DISCLAIMER: I'm not sure if this is a good idea, but it actually works.
 This is currently an experiment in progress. I'm very open for comments. Also, this is my first Golang thingy.
 
-Usage, assuming you have your Go environment up & running:
+Usage, assuming you have your Go environment prepared:
 
 ```
 git clone https://github.com/nkoster/websocket-upload-go
@@ -30,6 +30,12 @@ go run *.go
 Open http://localhost:8086 and drag-and-drop a file in the page.
 An uploaded file will appear in /tmp/, in this example.
 
+You can adjust the host and the port:
+
+```
+./websocket-upload -host example.com -port 8000
+```
+
 Before uploading, an MD5 sum is calculated. This is for the future.
 I'm using [js-spark-md5](https://github.com/satazor/js-spark-md5) from André Cruz
-for the in-fly MD5 calculation.
+for the incremental (stream) MD5 calculation.
