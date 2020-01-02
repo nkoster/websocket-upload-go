@@ -9,7 +9,7 @@ func html() string {
 	</head>
 	<body style="margin:0;font-family:sans-serif;background:#4c8;">
 		<div id="progress">Drop a file...</div>
-		<script src="//cdn.rawgit.com/satazor/SparkMD5/master/spark-md5.min.js"></script>
+		<script>` + jsmd5() + `</script>
 		<script>
 	
 	(function() {
