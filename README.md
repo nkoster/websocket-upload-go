@@ -38,4 +38,4 @@ You can adjust the host and the port:
 
 Before uploading, an MD5 sum is calculated. This is for the future.
 I'm using [js-spark-md5](https://github.com/satazor/js-spark-md5) from André Cruz
-for the in-fly MD5 calculation.
+for the incremental (stream) MD5 calculation.
