@@ -12,9 +12,9 @@
 (function() {
 var chunkSize = 1024 * 1024 * 4
 var socket = new WebSocket('ws://localhost:8086/ws')
-socket.addEventListener('appended', () => {
-    console.log('chunk appended')
-})
+socket.onmessage = function() {
+    console.log('Received ready event')
+}
 var progress = document.getElementById('progress')
 progress.style.background = '#396'
 progress.style.color = '#fff'
