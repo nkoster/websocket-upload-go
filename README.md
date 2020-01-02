@@ -28,7 +28,11 @@ go run *.go
 ```
 
 Open http://localhost:8086 and drag-and-drop a file in the page.
-An uploaded file will appear in /tmp/, in this example.
+An uploaded file will appear in /tmp/, but you can adjust that:
+
+```
+./websocket-upload -store /home/storage/raw
+```
 
 You can adjust the host and the port:
 
