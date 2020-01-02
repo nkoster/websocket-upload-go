@@ -15,7 +15,7 @@ var upgrader = websocket.Upgrader{}
 func main() {
 	var serverHost string = "localhost"
 	var serverPort string = "8086"
-	var serverStore string = "/tmp/"
+	var serverStore string = "/tmp"
 	for i, arg := range os.Args {
 		if arg == "-host" {
 			if i+1 < len(os.Args) {
