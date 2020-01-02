@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/websocket"
@@ -19,10 +20,13 @@ func main() {
 		var conn, _ = upgrader.Upgrade(w, r, nil)
 		go func(conn *websocket.Conn) {
 			for {
-				mt, _, _ := conn.ReadMessage()
+				mt, msg, _ := conn.ReadMessage()
 				fmt.Println(mt)
+				if mt == 1 {
+					fmt.Println(string(msg))
+				}
 			}
 		}(conn)
 	})
-	http.ListenAndServe(":8086", nil)
+	log.Fatal(http.ListenAndServe(":8086", nil))
 }
