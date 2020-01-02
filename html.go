@@ -1,6 +1,6 @@
 package main
 
-func html() string {
+func html(serverHost string, serverPort string) string {
 	return `<!DOCTYPE HTML>
 	<html lang="en">
 	<head>
@@ -14,7 +14,7 @@ func html() string {
 	
 	(function() {
 	var chunkSize = 1024 * 1024 * 4
-	var socket = new WebSocket('ws://localhost:8086/ws')
+	var socket = new WebSocket('ws://` + serverHost + ":" + serverPort + `/ws')
 	socket.onmessage = function() {
 		console.log('Received ready event')
 	}
@@ -23,15 +23,15 @@ func html() string {
 			console.log(socket.readyState)
 			socket.close()
 			setTimeout(function() {
-				socket = new WebSocket('ws://localhost:8086/ws')
-				socket.onclose = closeSocket
+				socket = new WebSocket('ws://` + serverHost + ":" + serverPort + `/ws')
+				if (typeof socket.onclose === 'undefined') socket.onclose = closeSocket
 				socket.onmessage = function() {
 					console.log('Received ready event')
 				}
 			}, 3000)
 			}
 	}
-	socket.onclose = closeSocket
+	if (typeof socket.onclose === 'undefined') socket.onclose = closeSocket
 	var progress = document.getElementById('progress')
 	progress.style.background = '#396'
 	progress.style.color = '#fff'
