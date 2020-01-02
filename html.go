@@ -18,6 +18,20 @@ func html() string {
 	socket.onmessage = function() {
 		console.log('Received ready event')
 	}
+	var closeSocket = function() {
+		if (socket.readyState !== 1) {
+			console.log(socket.readyState)
+			socket.close()
+			setTimeout(function() {
+				socket = new WebSocket('ws://localhost:8086/ws')
+				socket.onclose = closeSocket
+				socket.onmessage = function() {
+					console.log('Received ready event')
+				}
+			}, 3000)
+			}
+	}
+	socket.onclose = closeSocket
 	var progress = document.getElementById('progress')
 	progress.style.background = '#396'
 	progress.style.color = '#fff'
