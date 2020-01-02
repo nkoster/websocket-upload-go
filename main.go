@@ -15,13 +15,25 @@ var upgrader = websocket.Upgrader{}
 func main() {
 	var serverHost string = "localhost"
 	var serverPort string = "8086"
+	var serverStore string = "/tmp/"
 	for i, arg := range os.Args {
 		if arg == "-host" {
-			serverHost = os.Args[i+1]
+			if i+1 < len(os.Args) {
+				serverHost = os.Args[i+1]
+			}
 			arg = ""
 		}
 		if arg == "-port" {
-			serverPort = os.Args[i+1]
+			if i+1 < len(os.Args) {
+				serverPort = os.Args[i+1]
+			}
+			arg = ""
+		}
+		if arg == "-store" {
+			if i+1 < len(os.Args) {
+				serverStore = os.Args[i+1]
+				serverStore = strings.TrimRight(serverStore, "/")
+			}
 			arg = ""
 		}
 		if arg == "--help" {
@@ -29,7 +41,7 @@ func main() {
 			os.Exit(0)
 		}
 	}
-	log.Println("flextube", serverHost+":"+serverPort)
+	log.Println("flextube", serverHost+":"+serverPort, serverStore)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, html(serverHost, serverPort))
 	})
@@ -53,7 +65,7 @@ func main() {
 				if mt == 1 {
 					event := strings.Split(string(data), ":")
 					if event[0] == "upload" {
-						filename = "/tmp/" + event[1]
+						filename = serverStore + "/" + event[1]
 						f, err = os.Create(filename)
 						if err != nil {
 							log.Println(err)
