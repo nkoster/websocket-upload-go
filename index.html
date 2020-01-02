@@ -29,12 +29,7 @@ function parseFile(file, options) {
     var readBlock = null
     var chunkReadCallback = function(data) {
         console.log(data)
-        // socket.binaryType = "arraybuffer"
         socket.send(data)
-        // socket.send(JSON.stringify({
-        //     message: 'chunk',
-        //     data: data
-        // }))
     }
     var chunkErrorCallback = function(err) {
         console.log('ERROR', err)
@@ -56,10 +51,7 @@ function parseFile(file, options) {
         progress.style.width = percentage + '%'
         if (offset === fileSize) {
             result('Success!', offset)
-            socket.send(JSON.stringify({
-                message: 'ready',
-                bytes: offset
-            }))
+            socket.send('ready:' +  offset)
             return
         } else if (offset > fileSize) {
             result('Fail!', offset)
@@ -119,10 +111,7 @@ function getFileChecksum(file, options) {
 window.ondragover = function() { return false }
 window.ondrop = function(e) { 
     if (e.dataTransfer.files.length > 0) {
-        socket.send(JSON.stringify({
-            message: 'upload',
-            filename: e.dataTransfer.files[0].name
-        }))
+        socket.send('upload:' +  e.dataTransfer.files[0].name)
         socket.uploadChecksum = () => {}
         getFileChecksum(e.dataTransfer.files[0])
     }
