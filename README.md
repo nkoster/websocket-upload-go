@@ -4,7 +4,7 @@ Upload a huge file in chunks over a web socket connection.
 
 (Based on https://github.com/nkoster/websocket-upload, where the server is written in JavaScript)
 
-I'm using the [https://github.com/gorilla/websocket/](Gorilla) web socket framework for the server side web socket logic. 
+I'm using the [Gorilla](https://github.com/gorilla/websocket/) web socket framework for the server side web socket logic. 
 Front JS is based on a gist from Alessandro Diaferia. (Thank you!)
 https://gist.github.com/alediaferia/cfb3a7503039f9278381
 
