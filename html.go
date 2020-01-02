@@ -28,10 +28,10 @@ func html(serverHost string, serverPort string) string {
 				socket.onmessage = function() {
 					console.log('Received ready event')
 				}
-			}, 3000)
+			}, 5000)
 			}
 	}
-	if (typeof socket.onclose === 'undefined') socket.onclose = closeSocket
+	socket.onclose = closeSocket
 	var progress = document.getElementById('progress')
 	progress.style.background = '#396'
 	progress.style.color = '#fff'
