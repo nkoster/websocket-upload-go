@@ -14,24 +14,6 @@ func html(serverHost string, serverPort string) string {
 	
 	(function() {
 	var chunkSize = 1024 * 1024 * 4
-	var socket = new WebSocket('ws://` + serverHost + ":" + serverPort + `/ws')
-	socket.onmessage = function() {
-		console.log('Received ready event')
-	}
-	var closeSocket = function() {
-		if (socket.readyState !== 1) {
-			console.log(socket.readyState)
-			socket.close()
-			setTimeout(function() {
-				socket = new WebSocket('ws://` + serverHost + ":" + serverPort + `/ws')
-				if (typeof socket.onclose === 'undefined') socket.onclose = closeSocket
-				socket.onmessage = function() {
-					console.log('Received ready event')
-				}
-			}, 5000)
-			}
-	}
-	socket.onclose = closeSocket
 	var progress = document.getElementById('progress')
 	progress.style.background = '#396'
 	progress.style.color = '#fff'
@@ -40,6 +22,30 @@ func html(serverHost string, serverPort string) string {
 	progress.style.display = 'block'
 	progress.style.height = '20px'
 	progress.style.whiteSpace = 'nowrap'
+	var socket = new WebSocket('ws://` + serverHost + ":" + serverPort + `/ws')
+	socket.onmessage = function(e) {
+		if (e.data === 'ready') {
+			progress.innerHTML = progress.innerHTML.replace('please wait...', ' upload complete')
+			console.log('Received ready event')
+		}
+	}
+	var closeSocket = function() {
+		if (socket.readyState !== 1) {
+			console.log(socket.readyState)
+			socket.close()
+			setTimeout(function() {
+				socket = new WebSocket('ws://` + serverHost + ":" + serverPort + `/ws')
+				if (typeof socket.onclose === 'undefined') socket.onclose = closeSocket
+				socket.onmessage = function(e) {
+					if (e.data === 'ready') {
+						progress.innerHTML = progress.innerHTML.replace('please wait...', ' upload complete')
+						console.log('Received ready event')
+					}
+				}
+			}, 5000)
+			}
+	}
+	socket.onclose = closeSocket
 	function parseFile(file, options) {
 		var fileSize = file.size
 		var offset = 0
@@ -64,7 +70,7 @@ func html(serverHost string, serverPort string) string {
 			}
 			var percentage = Math.round((offset / fileSize) * 100)
 			progress.innerHTML = file.name + ' (MD5=' + socket.uploadChecksum + ') ' +
-				' &nbsp; ' + percentage + '% uploaded'
+				' &nbsp; ' + percentage + '% processed, please wait...'
 			progress.style.width = percentage + '%'
 			if (offset === fileSize) {
 				result('Success!', offset)
