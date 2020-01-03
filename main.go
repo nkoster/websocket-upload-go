@@ -37,7 +37,7 @@ func main() {
 			arg = ""
 		}
 		if arg == "--help" {
-			log.Printf("\nUsage: %s [[-host <host>] [-port <port>]]\n", os.Args[0])
+			log.Printf("\nusage: %s [[-host <host>] [-port <port>]]\n", os.Args[0])
 			os.Exit(0)
 		}
 	}
@@ -49,17 +49,17 @@ func main() {
 		var err error
 		conn, err := upgrader.Upgrade(w, r, nil)
 		if err != nil {
-			log.Println("Broken connection.", err)
+			log.Println("error", err)
 			return
 		}
-		log.Printf("Connection, %T\n", conn)
+		log.Println("connection", r.RemoteAddr)
 		filename := ""
 		var f *os.File
 		go func(conn *websocket.Conn) {
 			for {
 				mt, data, connErr := conn.ReadMessage()
 				if connErr != nil {
-					log.Println("Broken connection.", connErr)
+					log.Println("error", connErr)
 					return
 				}
 				if mt == 1 {
@@ -76,7 +76,7 @@ func main() {
 						filename = ""
 						f.Close()
 						if err := conn.WriteMessage(1, []byte("ready")); err != nil {
-							log.Println("Error sending ready message")
+							log.Println("error sending ready message")
 						}
 					}
 				}
