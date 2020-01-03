@@ -87,5 +87,5 @@ func main() {
 			}
 		}(conn)
 	})
-	log.Fatal(http.ListenAndServe(":8086", nil))
+	log.Fatal(http.ListenAndServe(serverHost+":"+serverPort, nil))
 }
