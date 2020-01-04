@@ -66,5 +66,7 @@ Plus, you can use this program as a simple http server to serve static files in 
 ./websocket-upload-go -www /var/www/html
 ```
 
+The ```-www``` path can be either relative or absolute.
+
 In case you use this as a static http server, you can still use the websocket.
 Just make sure that you have your websocket URL in your JS in line with your host name and port, and stuff should work.
