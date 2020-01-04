@@ -48,7 +48,7 @@ pointing to the MD5 name:
       └── my-video.mp4 -> /store/files/166c5a55e29a73db2afd997b52e6e554
  ```
 
-The Go program only saves an MD5 name once and sends a message to the browser if the MD5 name already exists.
+The server only saves an MD5 name once and sends a message to the browser if the MD5 name already exists.
 You can have multiple symlinks pointing to one MD5 name.
 
 I'm using [js-spark-md5](https://github.com/satazor/js-spark-md5) from André Cruz
