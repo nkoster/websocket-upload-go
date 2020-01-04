@@ -22,7 +22,14 @@ func fileExists(filename string) bool {
 
 func main() {
 	serverHost, serverPort, serverStore, serverHTML := args()
-	log.Println("flextube", serverHost+":"+serverPort, serverStore, serverHTML)
+	showStore, showHTML := "", ""
+	if serverHTML != "" {
+		serverStore = ""
+		showHTML = "static:" + serverHTML
+	} else {
+		showStore = "store:" + serverStore
+	}
+	log.Println("flextube ->", serverHost+":"+serverPort, showStore, showHTML)
 	if serverHTML != "" {
 		fs := http.FileServer(http.Dir(serverHTML))
 		http.Handle("/", fs)
