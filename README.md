@@ -50,7 +50,7 @@ The MD5sum will be used as file name, and the original file name will be saved a
 I'm using [js-spark-md5](https://github.com/satazor/js-spark-md5) from André Cruz
 for the incremental (stream) MD5 calculation.
 
-You can adjust the host and the port:
+You can change the host and the port:
 
 ```
 ./websocket-upload-go -host example.com -port 8000
