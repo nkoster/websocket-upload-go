@@ -37,7 +37,7 @@ An uploaded file will appear in /tmp/, but you can adjust that:
 The ```-store``` path must be absolute.
 
 Before uploading, an MD5 sum is calculated in the browser.
-The MD5sum will be used as file name, and the original file name will be saved as a symlink,
+The MD5 sum will be used as file name, and the original file name will be saved as a symlink,
 pointing to the MD5 name:
 
 ```
