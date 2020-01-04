@@ -21,11 +21,16 @@ func fileExists(filename string) bool {
 }
 
 func main() {
-	serverHost, serverPort, serverStore := args()
-	log.Println("flextube", serverHost+":"+serverPort, serverStore)
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, html(serverHost, serverPort))
-	})
+	serverHost, serverPort, serverStore, serverHTML := args()
+	log.Println("flextube", serverHost+":"+serverPort, serverStore, serverHTML)
+	if serverHTML != "" {
+		fs := http.FileServer(http.Dir(serverHTML))
+		http.Handle("/", fs)
+	} else {
+		http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+			fmt.Fprint(w, html(serverHost, serverPort))
+		})
+	}
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		var err error
 		upgrader.CheckOrigin = func(r *http.Request) bool {
@@ -85,10 +90,10 @@ func main() {
 		}(conn)
 	})
 	if err := os.MkdirAll(serverStore+"/files/", 0755); err != nil {
-		log.Println(err)
+		// log.Println(err)
 	}
 	if err := os.MkdirAll(serverStore+"/links/", 0755); err != nil {
-		log.Println(err)
+		// log.Println(err)
 	}
 	log.Fatal(http.ListenAndServe(serverHost+":"+serverPort, nil))
 }
