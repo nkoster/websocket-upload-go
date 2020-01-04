@@ -9,7 +9,7 @@ Front-end JavaScript is based on a gist from Alessandro Diaferia.
 https://gist.github.com/alediaferia/cfb3a7503039f9278381
 
 DISCLAIMER: I'm not sure if this is a good idea, but it actually works.
-This is currently an experiment in progress. I'm very open for comments. Also, this is my first Golang thingy.
+This is currently a personal experiment in progress. I'm very open for comments. Also, this is my first Golang experience.
 
 Usage, assuming you have your Go environment prepared:
 
@@ -31,15 +31,31 @@ Open http://localhost:8086 and drag-and-drop a file in the page.
 An uploaded file will appear in /tmp/, but you can adjust that:
 
 ```
-./websocket-upload -store /home/storage/raw
+./websocket-upload-go -store /store
 ```
 
-You can adjust the host and the port:
+The ```-store``` path must be absolute.
+
+Before uploading, an MD5 sum is calculated in the browser.
+The MD5sum will be used as file name, and the original file name will be saved as a symlink,
+pointing to the MD5 name:
 
 ```
-./websocket-upload -host example.com -port 8000
-```
+/store/
+  ├── files
+  │   └── 166c5a55e29a73db2afd997b52e6e554
+  └── links
+      └── my-video.mp4 -> /store/files/166c5a55e29a73db2afd997b52e6e554
+ ```
 
-Before uploading, an MD5 sum is calculated. This is for the future.
+The server only saves an MD5 name once and sends a message to the browser if the MD5 name already exists.
+You can have multiple symlinks pointing to one MD5 name.
+
 I'm using [js-spark-md5](https://github.com/satazor/js-spark-md5) from André Cruz
 for the incremental (stream) MD5 calculation.
+
+You can change the host and the port:
+
+```
+./websocket-upload-go -host example.com -port 8000
+```
