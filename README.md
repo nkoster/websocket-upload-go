@@ -31,7 +31,7 @@ Open http://localhost:8086 and drag-and-drop a file in the page.
 An uploaded file will appear in /tmp/, but you can adjust that:
 
 ```
-./websocket-upload -store /store
+./websocket-upload-go -store /store
 ```
 
 The ```-store``` path must be absolute.
@@ -53,5 +53,5 @@ for the incremental (stream) MD5 calculation.
 You can adjust the host and the port:
 
 ```
-./websocket-upload -host example.com -port 8000
+./websocket-upload-go -host example.com -port 8000
 ```
