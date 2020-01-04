@@ -12,35 +12,16 @@ import (
 
 var upgrader = websocket.Upgrader{}
 
-func main() {
-	var serverHost string = "localhost"
-	var serverPort string = "8086"
-	var serverStore string = "/tmp"
-	for i, arg := range os.Args {
-		if arg == "-host" {
-			if i+1 < len(os.Args) {
-				serverHost = os.Args[i+1]
-			}
-			arg = ""
-		}
-		if arg == "-port" {
-			if i+1 < len(os.Args) {
-				serverPort = os.Args[i+1]
-			}
-			arg = ""
-		}
-		if arg == "-store" {
-			if i+1 < len(os.Args) {
-				serverStore = os.Args[i+1]
-				serverStore = strings.TrimRight(serverStore, "/")
-			}
-			arg = ""
-		}
-		if arg == "--help" {
-			log.Printf("\nusage: %s [[-host <host>] [-port <port>]]\n", os.Args[0])
-			os.Exit(0)
-		}
+func fileExists(filename string) bool {
+	info, err := os.Stat(filename)
+	if os.IsNotExist(err) {
+		return false
 	}
+	return !info.IsDir()
+}
+
+func main() {
+	serverHost, serverPort, serverStore := args()
 	log.Println("flextube", serverHost+":"+serverPort, serverStore)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, html(serverHost, serverPort))
@@ -57,6 +38,7 @@ func main() {
 		}
 		log.Println("connection", r.RemoteAddr)
 		filename := ""
+		linkname := ""
 		var f *os.File
 		go func(conn *websocket.Conn) {
 			for {
@@ -68,8 +50,20 @@ func main() {
 				if mt == 1 {
 					event := strings.Split(string(data), ":")
 					if event[0] == "upload" {
-						filename = serverStore + "/" + event[1]
-						f, err = os.Create(filename)
+						filename = serverStore + "/files/" + event[1]
+						if fileExists(filename) {
+							log.Println(filename + " already exists")
+							if err := conn.WriteMessage(1, []byte("exists")); err != nil {
+								log.Println("error sending exists message")
+							}
+						} else {
+							f, err = os.Create(filename)
+							if err != nil {
+								log.Println(err)
+							}
+						}
+						linkname = serverStore + "/links/" + event[2]
+						err = os.Symlink(filename, linkname)
 						if err != nil {
 							log.Println(err)
 						}
@@ -90,5 +84,11 @@ func main() {
 			}
 		}(conn)
 	})
+	if err := os.MkdirAll(serverStore+"/files/", 0755); err != nil {
+		log.Println(err)
+	}
+	if err := os.MkdirAll(serverStore+"/links/", 0755); err != nil {
+		log.Println(err)
+	}
 	log.Fatal(http.ListenAndServe(serverHost+":"+serverPort, nil))
 }
