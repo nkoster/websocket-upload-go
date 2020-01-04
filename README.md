@@ -60,7 +60,7 @@ You can change the host and the port:
 ./websocket-upload-go -host example.com -port 8000
 ```
 
-Plus, you can use this as a http server to server static files in a directory:
+Plus, you can use this program as a simple http server to serve static files in a directory:
 
 ```
 ./websocket-upload-go -www /var/www/html
