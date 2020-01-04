@@ -31,7 +31,7 @@ Open http://localhost:8086 and drag-and-drop a file in the page.
 An uploaded file will appear in /tmp/, but you can adjust that:
 
 ```
-./websocket-upload -store /home/storage/raw
+./websocket-upload -store /store
 ```
 
 The ```-store``` path must be absolute.
