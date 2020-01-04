@@ -36,12 +36,6 @@ An uploaded file will appear in /tmp/, but you can adjust that:
 
 The ```-store``` path must be absolute.
 
-You can adjust the host and the port:
-
-```
-./websocket-upload -host example.com -port 8000
-```
-
 Before uploading, an MD5 sum is calculated. 
 The MD5sum will be used as file name, and the original file name will be saved as a symlink:
 
@@ -53,6 +47,11 @@ The MD5sum will be used as file name, and the original file name will be saved a
       └── my-video.mp4 -> /store/files/166c5a55e29a73db2afd997b52e6e554
  ```
 
+You can adjust the host and the port:
+
+```
+./websocket-upload -host example.com -port 8000
+```
+
 I'm using [js-spark-md5](https://github.com/satazor/js-spark-md5) from André Cruz
 for the incremental (stream) MD5 calculation.
-
