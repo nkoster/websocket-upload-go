@@ -36,8 +36,9 @@ An uploaded file will appear in /tmp/, but you can adjust that:
 
 The ```-store``` path must be absolute.
 
-Before uploading, an MD5 sum is calculated. 
-The MD5sum will be used as file name, and the original file name will be saved as a symlink:
+Before uploading, an MD5 sum is calculated in the browser.
+The MD5sum will be used as file name, and the original file name will be saved as a symlink,
+pointing to the MD5 name:
 
 ```
 /store/
@@ -46,6 +47,9 @@ The MD5sum will be used as file name, and the original file name will be saved a
   └── links
       └── my-video.mp4 -> /store/files/166c5a55e29a73db2afd997b52e6e554
  ```
+
+The Go program only saves an MD5 name once and sends a message to the browser if the MD5 name already exists.
+You can have multiple symlinks pointing to one MD5 name.
 
 I'm using [js-spark-md5](https://github.com/satazor/js-spark-md5) from André Cruz
 for the incremental (stream) MD5 calculation.
