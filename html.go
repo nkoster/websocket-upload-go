@@ -28,6 +28,10 @@ func html(serverHost string, serverPort string) string {
 			progress.innerHTML = progress.innerHTML.replace('please wait...', ' upload complete')
 			console.log('Received ready event')
 		}
+		if (e.data === 'exists') {
+			console.log('file already exists')
+			socket.fileExists = true
+		}
 	}
 	var closeSocket = function() {
 		if (socket.readyState !== 1) {
@@ -41,6 +45,10 @@ func html(serverHost string, serverPort string) string {
 						progress.innerHTML = progress.innerHTML.replace('please wait...', ' upload complete')
 						console.log('Received ready event')
 					}
+					if (e.data === 'exists') {
+						console.log('file already exists')
+						socket.fileExists = true
+					}
 				}
 			}, 5000)
 			}
@@ -52,13 +60,14 @@ func html(serverHost string, serverPort string) string {
 		var readBlock = null
 		var chunkReadCallback = function(data) {
 			console.log(data)
-			socket.send(data)
+			if (!socket.fileExists) socket.send(data)
 		}
 		var chunkErrorCallback = function(err) {
 			console.log('ERROR', err)
 		}
 		var result = function(msg, count) {
 			console.log(msg + ' ' + count)
+			socket.fileExists = false
 		}
 		var onLoadHandler = function(evt) {
 			if (evt.target.error == null) {
@@ -115,6 +124,7 @@ func html(serverHost string, serverPort string) string {
 			progress.style.width = percentage + '%'
 			if (offset === fileSize) {
 				socket.uploadChecksum = spark.end()
+				socket.send('upload:' + socket.uploadChecksum + ':' + file.name)
 				parseFile(file)
 				return
 			} else if (offset > fileSize) {
@@ -134,8 +144,6 @@ func html(serverHost string, serverPort string) string {
 	window.ondragover = function() { return false }
 	window.ondrop = function(e) { 
 		if (e.dataTransfer.files.length > 0) {
-			socket.send('upload:' +  e.dataTransfer.files[0].name)
-			socket.uploadChecksum = () => {}
 			getFileChecksum(e.dataTransfer.files[0])
 		}
 		return false 
