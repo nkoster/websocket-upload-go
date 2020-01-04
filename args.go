@@ -6,10 +6,11 @@ import (
 	"strings"
 )
 
-func args() (string, string, string) {
+func args() (string, string, string, string) {
 	var serverHost string = "localhost"
 	var serverPort string = "8086"
 	var serverStore string = "/tmp"
+	var serverHTML string = ""
 	for i, arg := range os.Args {
 		if arg == "-host" {
 			if i+1 < len(os.Args) {
@@ -30,11 +31,18 @@ func args() (string, string, string) {
 			}
 			arg = ""
 		}
+		if arg == "-www" {
+			if i+1 < len(os.Args) {
+				serverHTML = os.Args[i+1]
+				serverHTML = strings.TrimRight(serverHTML, "/")
+			}
+			arg = ""
+		}
 		if arg == "--help" || arg == "-help" || arg == "/h" {
 			fmt.Printf("usage: %s [[-host <host>] [-port <port>] [-store <path>]]\n", os.Args[0])
 			fmt.Println("note: -store <path> must be absolute (/)")
 			os.Exit(0)
 		}
 	}
-	return serverHost, serverPort, serverStore
+	return serverHost, serverPort, serverStore, serverHTML
 }
