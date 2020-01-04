@@ -59,3 +59,12 @@ You can change the host and the port:
 ```
 ./websocket-upload-go -host example.com -port 8000
 ```
+
+Plus, you can use this program as a simple http server to serve static files in a directory:
+
+```
+./websocket-upload-go -www /var/www/html
+```
+
+In case you use this as a static http server, you can still use the websockets.
+Just make sure that you have your websocket URL in your JS in line with your host name and port, and stuff should work.
