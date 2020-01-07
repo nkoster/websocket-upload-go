@@ -37,7 +37,7 @@ An uploaded file will appear in /tmp/, but you can adjust that:
 The ```-store``` path must be absolute.
 
 Before uploading, an MD5 sum is calculated in the browser.
-The MD5sum will be used as file name, and the original file name will be saved as a symlink,
+The MD5 sum will be used as file name, and the original file name will be saved as a symlink,
 pointing to the MD5 name:
 
 ```
@@ -65,6 +65,8 @@ Plus, you can use this program as a simple http server to serve static files in 
 ```
 ./websocket-upload-go -www /var/www/html
 ```
+
+The ```-www``` path can be either relative or absolute.
 
 In case you use this as a static http server, you can still use the websocket.
 Just make sure that you have your websocket URL in your JS in line with your host name and port, and stuff should work.
