@@ -40,6 +40,7 @@ func main() {
 	}
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		var err error
+		// not safe, only for dev:
 		upgrader.CheckOrigin = func(r *http.Request) bool {
 			return true
 		}
@@ -49,8 +50,7 @@ func main() {
 			return
 		}
 		log.Println("connection", r.RemoteAddr)
-		filename := ""
-		linkname := ""
+		filename, linkname := "", ""
 		var f *os.File
 		go func(conn *websocket.Conn) {
 			for {
@@ -82,11 +82,16 @@ func main() {
 					}
 					log.Println(string(event[0]), filename)
 					if event[0] == "ready" {
-						filename = ""
 						f.Close()
+						if mt := mimeType(filename); mt != "" {
+							log.Println(filename, mt)
+						} else {
+							log.Println(filename, "unknown file type")
+						}
 						if err := conn.WriteMessage(1, []byte("ready")); err != nil {
 							log.Println("error sending ready message")
 						}
+						filename = ""
 					}
 				}
 				if mt == 2 {
